@@ -86,7 +86,7 @@ class UserController {
         $userModel = new UserModel();
         $id_cliente = EncryptionController::decrypt($_GET['id']);
         $cores = $userModel->getUserColor($id_cliente);
-        $id_cli = EncryptionController::encrypt($id_cliente);
+        $id_cli = $_GET['id'];
 
         foreach ($cores as &$cor) {
             $cor['id'] = EncryptionController::encrypt($cor['id']);
@@ -100,6 +100,10 @@ class UserController {
             $userModel = new UserModel();
             $user_id = EncryptionController::decrypt($_POST['id_client']);
             $color_id = EncryptionController::decrypt($_POST['addcor']);
+            echo '<pre>';
+            print_r($color_id);
+            die;
+
             $in_status = $_POST['in_status'];
 
             if ($in_status == 1) {

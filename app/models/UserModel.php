@@ -69,7 +69,7 @@ class UserModel {
         $sql = "DELETE FROM user_colors WHERE user_id = :user_id AND color_id = :color_id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-        $stmt->bindParam(':color_id', $color_id);
+        $stmt->bindParam(':color_id', $color_id, PDO::PARAM_INT);
         return $stmt->execute();
     }
 

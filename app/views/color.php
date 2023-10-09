@@ -31,31 +31,37 @@
                 Adicionar ou Remover Cores
             </div>
             <table class="table table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Cor</th>
-                    <th>Status</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($cores as $key => $c) { ?>
+                <thead class="thead-dark">
                     <tr>
-                        <td><?= $key + 1 ?></td>
-                        <td><?= $c['cor'] ?></td>
-                        <td class="text-center">
-                            <?= $c['status'] == 1 ? "<i style='color:green' title='Cor Ativa' class='fas fa-check'></i>" : "<i style='color:red' title='Cor Inativa' class='fas fa-times'></i>" ?>
-                        </td>
-                        <td>
-                            <?= $c['status'] == 0 ? "<a data-in_status='1' data-addcor='". $c['id'] ."' class='btn btn-success btn-sm btn_cor'> <i class='fas fa-plus'></i> Adicionar</a>" :
-                            "<a  data-in_status='0' data-addcor='". $c['id'] ."' class='btn btn-danger btn-sm btn_cor'> <i class='fas fa-trash'></i> Excluir</a>"?>
-                        </td>
+                        <th>ID</th>
+                        <th>Cor</th>
+                        <th>Status</th>
+                        <th>Ação</th>
                     </tr>
-                <?php } ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($cores as $key => $c) { ?>
+                        <tr>
+                            <td><?= $key + 1 ?></td>
+                            <td><?= $c['cor'] ?></td>
+                            <td class="text-center">
+                                <?= $c['status'] == 1 ? "<i style='color:green' title='Cor Ativa' class='fas fa-check'></i>" : "<i style='color:red' title='Cor Inativa' class='fas fa-times'></i>" ?>
+                            </td>
+                            <td>
+                                <?= $c['status'] == 0 ? "<a data-in_status='1' data-addcor='". $c['id'] ."' class='btn btn-success btn-sm btn_cor'> <i class='fas fa-plus'></i> Adicionar</a>" :
+                                "<a  data-in_status='0' data-addcor='". $c['id'] ."' class='btn btn-danger btn-sm btn_cor'> <i class='fas fa-trash'></i> Excluir</a>"?>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+            <div class="text-right">
+            <a href="index.php" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
         </div>
+        </div>
+        
     </div>
     <input type="hidden" value="<?= $id_cli ?>" name="id_cliente" id="id_cliente">
 </body>
@@ -75,7 +81,7 @@
             // Use jQuery para enviar uma solicitação AJAX para a sua controladora
             $.ajax({
                 type: 'POST',
-                url: 'index.php?action=add_cor', // Substitua com o caminho correto para a sua controladora
+                url: 'index.php?action=add_cor',
                 data: { 
                     addcor: addCorValue,
                     id_client:  idCliente,
@@ -84,7 +90,6 @@
 
                 },
                 success: function(response) {
-                    // Verifique se a resposta indica sucesso (você pode personalizar isso com base na resposta)
                     if (response.status === 'success') {
                         // Recarregue a página atual após o sucesso
                         setTimeout(function() {
@@ -93,46 +98,10 @@
                     }
                 },
                 error: function(error) {
-                    // Em caso de erro na solicitação AJAX
                     console.error('Erro AJAX:', error);
                 }
             });
         });
     });
-
-    // const buttons_remov = document.querySelectorAll('.btn_remov_cor');
-
-    // Adicione um ouvinte de evento de clique a cada botão
-    // buttons.forEach(button => {
-    //     button.addEventListener('click', function() {
-    //         // Acesse o atributo data-addcor do botão clicado
-    //         const addCorValue = button.getAttribute('data-removcor');
-    //         let idCliente = $('#id_cliente').val();
-
-    //         // Use jQuery para enviar uma solicitação AJAX para a sua controladora
-    //         $.ajax({
-    //             type: 'POST',
-    //             url: 'index.php?action=add_cor', // Substitua com o caminho correto para a sua controladora
-    //             data: { 
-    //                 addcor: addCorValue,
-    //                 id_client:  idCliente,
-    //                 action: 'add_cor'
-    //             },
-    //             success: function(response) {
-    //                 // Verifique se a resposta indica sucesso (você pode personalizar isso com base na resposta)
-    //                 if (response.status === 'success') {
-    //                     // Recarregue a página atual após o sucesso
-    //                     setTimeout(function() {
-    //                         window.location.href = 'index.php?action=add_cores&id='+idCliente;
-    //                     }, 1000); 
-    //                 }
-    //             },
-    //             error: function(error) {
-    //                 // Em caso de erro na solicitação AJAX
-    //                 console.error('Erro AJAX:', error);
-    //             }
-    //         });
-    //     });
-    // });
 
 </script>

@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="text-right">
-                        <a href="#" class="btn btn-secondary btn-sm mr-2">
+                        <a href="index.php" class="btn btn-secondary btn-sm mr-2">
                             <i class="fas fa-arrow-left"></i> Voltar
                         </a>
                         <button type="submit" class="btn btn-primary btn-sm">
