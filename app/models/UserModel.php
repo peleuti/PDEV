@@ -73,6 +73,13 @@ class UserModel {
         return $stmt->execute();
     }
 
+    public function deleteCores($id) {
+        $sql = "DELETE FROM user_colors WHERE user_id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
     
 }
 ?>

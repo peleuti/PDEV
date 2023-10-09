@@ -15,19 +15,23 @@ class UserController {
 
     public function create() {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $name = $_POST['name'];
-            $email = $_POST['email'];
-
-            $userModel = new UserModel();
-            if ($userModel->createUser($name, $email)) {
-                header("Location: index.php");
-            } else {
-                echo "Erro ao criar usuário.";
+            try {
+                $name = $_POST['name'];
+                $email = $_POST['email'];
+    
+                $userModel = new UserModel();
+                if ($userModel->createUser($name, $email)) {
+                    header("Location: index.php");
+                } else {
+                    echo "Erro ao criar usuário.";
+                }
+            } catch (Exception $e) {
+                echo "Erro durante a criação do usuário: " . $e->getMessage();
             }
         } else {
             include 'app/views/user/create.php';
         }
-    }
+    }    
 
     public function edit() {
         
@@ -46,37 +50,45 @@ class UserController {
     
     public function update() {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $id = EncryptionController::decrypt($_POST['id']);
-            $name = $_POST['name'];
-            $email = $_POST['email'];
+            try {
+                $id = EncryptionController::decrypt($_POST['id']);
+                $name = $_POST['name'];
+                $email = $_POST['email'];
     
-            $userModel = new UserModel();
+                $userModel = new UserModel();
     
-            if ($userModel->updateUser($id, $name, $email)) {
-                header("Location: index.php");
-                exit();
-            } else {
-                echo "Erro ao atualizar usuário.";
+                if ($userModel->updateUser($id, $name, $email)) {
+                    header("Location: index.php");
+                    exit();
+                } else {
+                    echo "Erro ao atualizar usuário.";
+                }
+            } catch (Exception $e) {
+                echo "Erro durante a atualização: " . $e->getMessage();
             }
         } else {
-            // Se não for uma solicitação POST, redirecione para a página inicial
             header("Location: index.php");
             exit();
         }
-    }
+    }    
 
     public function delete() {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $id = EncryptionController::decrypt($_POST['id']);
-            
-            $userModel = new UserModel();
-            if ($userModel->deleteUser($id)) {
-                header("Location: index.php");
-            } else {
-                echo "Erro ao excluir usuário.";
+            try {
+                $id = EncryptionController::decrypt($_POST['id']);
+                
+                $userModel = new UserModel();
+                if ($userModel->deleteUser($id)) {
+                    $userModel->deleteCores($id);
+                    header("Location: index.php");
+                } else {
+                    echo "Erro ao excluir usuário.";
+                }
+            } catch (Exception $e) {
+                echo "Erro durante a exclusão: " . $e->getMessage();
             }
         }
-    }
+    }    
 
     public function add() {
         include 'app/views/create.php';
@@ -100,9 +112,6 @@ class UserController {
             $userModel = new UserModel();
             $user_id = EncryptionController::decrypt($_POST['id_client']);
             $color_id = EncryptionController::decrypt($_POST['addcor']);
-            echo '<pre>';
-            print_r($color_id);
-            die;
 
             $in_status = $_POST['in_status'];
 
