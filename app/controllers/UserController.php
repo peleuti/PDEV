@@ -119,7 +119,6 @@ class UserController {
             );
         }
     
-        // Agora você pode retornar a resposta (response) como um JSON para o cliente.
         header('Content-Type: application/json');
         echo json_encode($response);
     }
