@@ -1,18 +1,21 @@
 <?php
-class EncryptionController {
-    private static $encryptionKey = 'F345E5CDE73AA264BB44C818DBD43C4B';
-    private static $iv = 'e3c633b643e36ba2bfa22f444cff4741';
 
-    public static function encrypt($data) {
+class EncryptionController
+{
+    private static $method = 'aes-256-cbc';
+    private static $encryptionKey = 'F345E5CDE73AA264';
+
+    public static function encrypt($data)
+    {
         try {
-            $iv = hex2bin(self::$iv);
-            $encryptedData = openssl_encrypt($data, 'aes-256-cbc', self::$encryptionKey, 0, $iv);
-
+            $ivSize = openssl_cipher_iv_length(self::$method);
+            $iv = openssl_random_pseudo_bytes($ivSize);
+            $encryptedData = openssl_encrypt($data, self::$method, self::$encryptionKey, 0, $iv);
             if ($encryptedData === false) {
                 throw new Exception('Erro na criptografia: ' . openssl_error_string());
             }
 
-            return base64_encode($iv . $encryptedData);
+            return base64_encode(bin2hex($iv) . '.' . $encryptedData);
         } catch (Exception $e) {
             // phpinfo();
             // echo '<pre>';
@@ -21,13 +24,20 @@ class EncryptionController {
         }
     }
 
-    public static function decrypt($encryptedData) {
+    public static function decrypt($encryptedData)
+    {
         try {
-            $data = base64_decode($encryptedData);
-            $iv = hex2bin(self::$iv);
-            $encryptedData = substr($data, 16);
-            $decryptedData = openssl_decrypt($encryptedData, 'aes-256-cbc', self::$encryptionKey, 0, $iv);
+            $decrypted = base64_decode($encryptedData);
 
+            $crypted = explode('.', $decrypted);
+            if (count($crypted) !== 2) {
+                throw new Exception('Erro na descriptografia.');
+            }
+
+            $iv = hex2bin($crypted[0]);
+            $data = $crypted[1];
+
+            $decryptedData = openssl_decrypt($data, self::$method, self::$encryptionKey, 0, $iv);
             if ($decryptedData === false) {
                 throw new Exception('Erro na descriptografia.');
             }
@@ -40,5 +50,5 @@ class EncryptionController {
             // die;
         }
     }
-    
+
 }
